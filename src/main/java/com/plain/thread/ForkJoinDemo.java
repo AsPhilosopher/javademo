@@ -19,7 +19,7 @@ public class ForkJoinDemo extends RecursiveTask<Integer> {
     @Override
     protected Integer compute() {
         int sum = 0;
-        //如果任务足够小就计算
+        //如果任务足够小就直接计算
         boolean canCompute = (end - start) <= THREAD_HOLD;
         if (canCompute) {
             for (int i = start; i <= end; i++) {
@@ -29,12 +29,29 @@ public class ForkJoinDemo extends RecursiveTask<Integer> {
             int middle = (start + end) / 2;
             ForkJoinDemo left = new ForkJoinDemo(start, middle);
             ForkJoinDemo right = new ForkJoinDemo(middle + 1, end);
-            //执行子任务
+            //执行子任务。此时线程先执行子任务，执行完再回来执行当前任务
             left.fork();
             right.fork();
+            int lResult = 0;
+            int rResult = 0;
             //获取子任务结果
-            int lResult = left.join();
-            int rResult = right.join();
+            lResult = left.join();
+            rResult = right.join();
+
+            /*try {
+                lResult = left.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            try {
+                rResult = right.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }*/
             sum = lResult + rResult;
         }
         return sum;
