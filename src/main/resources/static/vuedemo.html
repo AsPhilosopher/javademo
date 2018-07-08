@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <script src="js/vue.js"></script>
+    <!--<script src="js/vue-resource.js"></script>-->
+    <script src="js/axios.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <h2>学生信息登记</h2>
+    <br>
+    <div>
+        <label>姓名：</label>
+        <input type="text" placeholder="请输入姓名" v-model="names">
+    </div>
+    <div>
+        <label>性别：</label>
+        <input id="sex01" type="radio" value="1" v-model="sex">
+        <label for="sex01">男</label>
+        <input id="sex02" type="radio" value="2" v-model="sex">
+        <label for="sex02">女</label>
+    </div>
+    <div>
+        <label>年龄：</label>
+        <select v-model="age">
+            <option selected>18</option>
+            <option>19</option>
+            <option>20</option>
+            <option>21</option>
+        </select>
+    </div>
+    <div>
+        <label>党员：</label>
+        <input type="checkbox" v-model="member">
+    </div>
+    <br>
+    <button id="btnCommit" v-on:click="commit">提交</button>
+    <button id="btnReset" v-on:click="reset">重置</button>
+    <button id="btn" v-on:click="test">请求</button>
+    <br>
+    <br>
+    <label>{{ result }}</label>
+</div>
+<script>
+    var vue = new Vue({
+        el: '#app',
+        data: {
+            names: '',
+            sex: '',
+            age: '',
+            member: '',
+            result: ''
+        },
+        ready: function () {
+            alert("加载完成");
+        },
+        methods: {
+            commit: function () {
+                var names = this.names;
+                var sex = '';
+                if (this.sex == 1) {
+                    sex = '男';
+                } else if (this.sex == 2) {
+                    sex = '女';
+                }
+                var age = this.age;
+                var member = '';
+                if (this.member) {
+                    member = '党员';
+                } else {
+                    member = '非党员';
+                }
+                var result = names + ' ' + sex + ' ' + age + ' ' + member;
+                this.result = result;
+            },
+            reset: function () {
+                this.result = '';
+            },
+            test: function () {
+                axios.post('/mytest', {
+                    "age":10,
+                    "name":"陈樟杰"
+                }, {baseURL: "http://localhost:8080"}).then(function(res){
+                    console.log(res);
+                    var result = res.data.data.age + ' ' + res.data.data.name;
+                    vue.result = result;
+                    console.log(res);
+                });
+            }
+        },
+        watch: {
+            'sex': function (val, oldVal) {
+                console.log('oldVal = ' + oldVal + ' val = ' + val);
+            }
+        }
+    });
+</script>
+</body>
+</html>

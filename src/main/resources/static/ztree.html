@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ztree</title>
+    <link type="text/css" rel="stylesheet" href="css/zTreeStyle.css">
+</head>
+<body>
+    <div id="treeDemo" class="ztree"></div>
+    <button id="btn" onclick="refresh()">刷新</button>
+</body>
+
+<script src="js/jquery-1.8.2.min.js"></script>
+<script src="js/jquery.ztree.core.min.js"></script>
+<script type="text/javascript">
+    var setting = {
+        view: {
+            dblClickExpand: false,
+            showLine: true,
+            selectedMulti: false,
+            fontCss: getFont
+//			nameIsHTML: true
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                idKey: "id",
+                pIdKey: "pId",
+                rootPId: ""
+            }
+        },
+        async: {
+            enable: true
+        },
+        callback: {
+            beforeClick: function (treeId, treeNode) {
+                var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+                if (treeNode.isParent) {
+                    zTree.expandNode(treeNode);
+                    return false;
+                } else {
+//	            demoIframe.attr("src", treeNode.file + ".html");
+                    alert("请求数据");
+                    return true;
+                }
+            }
+        }
+    };
+
+    var zNodes = [
+        {id: '1', pId: 0, name: "[core] Basic Functions", open: false},
+        {id: 101, pId: '1', name: "Standard JSON Data",  font:{'color':'red'}},
+        {id: 102, pId: '1', name: "Simple JSON Data",  font:{'color':'black'}},
+
+        {id: 2, pId: 0, name: "[excheck] Checkbox & Radio", open: false},
+        {id: 201, pId: 2, name: "Checkbox Operation", font:{'color':'black'}},
+        {id: 206, pId: 2, name: "Checkbox nocheck Demo", font:{'color':'red'}},
+
+        {id: 3, pId: 0, name: "[exedit] Editing", open: false},
+        {id: 301, pId: 3, name: "Normal Drag Node Operation", font:{'color':'black'}},
+        {id: 302, pId: 3, name: "Advanced Drag Node Operation", font:{'color':'black'}},
+
+        {id: 4, pId: 0, name: "Large Amount of Data Loading", open: false},
+        {id: 401, pId: 4, name: "One-time Large Data Loading", font:{'color':'red'}},
+
+        {id: 5, pId: 0, name: "Multi-functional", open: false},
+        {id: 501, pId: 5, name: "Freeze the Root Node", font:{'color':'black'}},
+
+        {id: 6, pId: 0, name: "Other Extension Package", open: false},
+        {id: 601, pId: 6, name: "hide ordinary node", font:{'color':'black'}},
+        {id: 602, pId: 6, name: "hide with checkbox mode", font:{'color':'red'}},
+        {id: 603, pId: 6, name: "hide with radio mode", font:{'color':'black'}}
+    ];
+    function getFont(treeId, node) {
+        return node.font ? node.font : {};
+    }
+
+    $(document).ready(function(){
+        $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+    });
+
+    function refresh() {
+        var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+        var nodes = treeObj.getSelectedNodes();
+        console.log(nodes[0]);
+        nodes[0].name = "FUCK";
+        console.log(nodes[0]);
+        // treeObj.refresh();
+        treeObj.updateNode(nodes[0]);
+    }
+</script>
+
+</html>
