@@ -84,6 +84,12 @@
             <artifactId>curator-client</artifactId>
             <version>${curator.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-x-discovery-server</artifactId>
+            <version>${curator.version}</version>
+        </dependency>
+
 
         <!-- Spring依赖 -->
         <!-- 1.Spring核心依赖 -->
