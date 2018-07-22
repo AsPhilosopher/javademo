@@ -1,5 +1,6 @@
 package com.plain.zookeeper.curator.master;
 
+import com.plain.zookeeper.Statics;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -16,7 +17,6 @@ import java.util.List;
  */
 public class LeaderLatchTest {
     private static final String PATH = "/demo/leader";
-    private static final String CONNECT_ADDR = "127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183";
 
     public static void main(String[] args) {
         List<LeaderLatch> latchList = new ArrayList<>();
@@ -61,7 +61,7 @@ public class LeaderLatchTest {
     private static CuratorFramework getClient() {
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3);
         CuratorFramework client = CuratorFrameworkFactory.builder()
-                .connectString(CONNECT_ADDR)
+                .connectString(Statics.CONNECT_ADDR)
                 .retryPolicy(retryPolicy)
                 .sessionTimeoutMs(6000)
                 .connectionTimeoutMs(3000)

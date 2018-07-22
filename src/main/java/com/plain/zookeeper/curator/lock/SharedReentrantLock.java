@@ -1,5 +1,6 @@
 package com.plain.zookeeper.curator.lock;
 
+import com.plain.zookeeper.Statics;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
@@ -10,8 +11,6 @@ public class SharedReentrantLock implements Runnable {
     private String lockPAth = "/lock/shareLock";
     private static int I = 0;
     private String clientName;
-    //zookeeper集群地址
-    public static final String ZOOKEEPERSTRING = "127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183";
 
     public SharedReentrantLock(CuratorFramework client, String clientName) {
         lock = new InterProcessMutex(client, lockPAth);
@@ -45,7 +44,7 @@ public class SharedReentrantLock implements Runnable {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        CuratorFramework client = CuratorFrameworkFactory.newClient(ZOOKEEPERSTRING, new ExponentialBackoffRetry(1000, 3));
+        CuratorFramework client = CuratorFrameworkFactory.newClient(Statics.CONNECT_ADDR, new ExponentialBackoffRetry(1000, 3));
         client.start();
         //启动100个线程进行测试
         for (int i = 0; i < 100; i++) {

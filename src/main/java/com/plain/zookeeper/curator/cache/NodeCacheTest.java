@@ -1,5 +1,6 @@
 package com.plain.zookeeper.curator.cache;
 
+import com.plain.zookeeper.Statics;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -10,13 +11,10 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
  * 监听节点的新增、修改，删除操作。
  */
 public class NodeCacheTest {
-    private static final String CONNECT_ADDR = "127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183";
-    private static final int SESSION_TIMEOUT = 5000;
-
     public static void main(String[] args) throws Exception {
         RetryPolicy policy = new ExponentialBackoffRetry(1000, 10);
-        CuratorFramework curator = CuratorFrameworkFactory.builder().connectString(CONNECT_ADDR)
-                .sessionTimeoutMs(SESSION_TIMEOUT).retryPolicy(policy).build();
+        CuratorFramework curator = CuratorFrameworkFactory.builder().connectString(Statics.CONNECT_ADDR)
+                .sessionTimeoutMs(Statics.SESSION_TIMEOUT).retryPolicy(policy).build();
         curator.start();
 
         //最后一个参数表示是否进行压缩
