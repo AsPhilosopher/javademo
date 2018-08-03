@@ -10,6 +10,7 @@
         <module>io</module>
         <module>spring</module>
         <module>zookeeper</module>
+        <module>springcloud</module>
     </modules>
 
     <groupId>com.czj.javademo</groupId>
@@ -33,5 +34,4 @@
             <version>${junit.version}</version>
         </dependency>
     </dependencies>
-
 </project>
