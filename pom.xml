@@ -11,6 +11,7 @@
         <module>spring</module>
         <module>zookeeper</module>
         <module>springcloud</module>
+        <module>elasticsearch</module>
     </modules>
 
     <groupId>com.czj.javademo</groupId>
