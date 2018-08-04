@@ -13,10 +13,11 @@ public class JDBCDemo {
         Class.forName(jdbc);
         //获取连接
         Connection conn = DriverManager.getConnection(url, user, password);
-        PreparedStatement pst = conn.prepareStatement("SELECT * FROM name");
+        PreparedStatement pst = conn.prepareStatement("SELECT * FROM people");
         ResultSet set = pst.executeQuery();
         System.out.println(set.next());
         System.out.println(set.getObject(1));
         System.out.println(set.getObject(2));
+        System.out.println(set.getObject(3));
     }
 }

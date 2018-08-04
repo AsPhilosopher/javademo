@@ -10,6 +10,7 @@
 
     <description>SOAP Web Service配置</description>
     <!--
+        /cxf/ 是在web.xml里定义的
         http://localhost:8080/cxf/soap/userService?wsdl
     -->
     <!-- jax-ws endpoint定义  -->
