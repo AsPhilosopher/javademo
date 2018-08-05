@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+//@ExampleBoot //TODO 测试注解时需要注释掉spring.factories中的内容
 @SpringBootApplication
 @RestController
 public class Application {

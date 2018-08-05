@@ -2,9 +2,9 @@ package com.plain.springboot.starter;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties("example.service")
+@ConfigurationProperties("lincon.service")
 public class ExampleServiceProperties {
-    private String prefix;
+    private String prefix = "@PREFIX@";
     private String suffix;
 
     public String getPrefix() {

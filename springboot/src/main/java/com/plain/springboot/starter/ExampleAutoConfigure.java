@@ -18,7 +18,7 @@ public class ExampleAutoConfigure {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(prefix = "example.service", value = "enabled", havingValue = "true")
+    @ConditionalOnProperty(prefix = "lincon.service", value = "enabled", havingValue = "true")
     ExampleService exampleService() {
         return new ExampleService(properties.getPrefix(), properties.getSuffix());
     }

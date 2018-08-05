@@ -1,0 +1,31 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.plain.springboot.starter.ExampleServiceProperties",
+      "name": "lincon.service",
+      "type": "com.plain.springboot.starter.ExampleServiceProperties"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.plain.springboot.starter.ExampleServiceProperties",
+      "name": "lincon.service.prefix",
+      "type": "java.lang.String",
+      "defaultValue": "@PREFIX@",
+      "description": ""
+    },
+    {
+      "sourceType": "com.plain.springboot.starter.ExampleServiceProperties",
+      "name": "lincon.service.suffix",
+      "type": "java.lang.String",
+      "description": ""
+    },
+    {
+      "sourceType": "com.plain.springboot.starter.ExampleServiceProperties",
+      "name": "lincon.service.enabled",
+      "type": "java.lang.Boolean",
+      "description": ""
+    }
+  ]
+}
