@@ -2,10 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:jaxws="http://cxf.apache.org/jaxws"
-       xsi:schemaLocation="http://cxf.apache.org/jaxws
-    http://cxf.apache.org/schemas/jaxws.xsd
-    http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans-3.1.xsd"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xsi:schemaLocation="http://cxf.apache.org/jaxrs
+        http://cxf.apache.org/schemas/jaxrs.xsd
+        http://cxf.apache.org/jaxws
+        http://cxf.apache.org/schemas/jaxws.xsd
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd"
        default-lazy-init="true">
 
     <description>SOAP Web Service配置</description>
@@ -19,4 +22,20 @@
     </jaxws:endpoint>
     <!-- WebService的实现Bean定义 -->
     <bean id="userService" class="com.plain.cxf.UserServiceImpl"/>
+
+    <!-- jax-rs endpoint定义  -->
+    <!--http://localhost:8080/cxf/jaxrs?_wadl-->
+    <jaxrs:server id="serviceContainer" address="/jaxrs">
+        <jaxrs:serviceBeans>
+            <ref bean="userJaxRsService"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+    <bean id="biService" class="com.plain.cxf.jax_rs.BiService"/>
+    <!-- WebService的实现Bean定义 -->
+    <bean id="userJaxRsService" class="com.plain.cxf.jax_rs.UserJaxRsServiceImpl">
+        <property name="biService" ref="biService"/>
+    </bean>
 </beans>

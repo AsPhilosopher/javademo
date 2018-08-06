@@ -28,6 +28,12 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
             <version>${spring.boot.version}</version>
         </dependency>-->
+        <!--动态生成metadata-->
+        <!--<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>-->
     </dependencies>
 
     <dependencyManagement>
