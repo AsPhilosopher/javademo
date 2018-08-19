@@ -27,7 +27,7 @@ public class LambdaDemo {
         List features = Arrays.asList("Lambdas", "Default Method", "Stream API", "Date and Time API");
         features.forEach(n -> System.out.println(n));
 
-        testfunction1();
+        testErgodic();
 
         /**
          * 过滤
@@ -35,7 +35,7 @@ public class LambdaDemo {
         List languages = Arrays.asList("Java", "Scala", "C++", "Haskell", "Lisp", "JavaScript");
 
         System.out.println("Languages which starts with J :");
-        LambdaDemo.filter(languages, (str) -> str.startsWith("J"));
+        LambdaDemo.testFilter(languages, (str) -> str.startsWith("J"));
 
         List<String> strList = Arrays.asList("abc", "bcd", "defg", "jk");
         List<String> filtered = strList.stream().filter(x -> x.length() > 2).collect(Collectors.toList());
@@ -53,13 +53,11 @@ public class LambdaDemo {
      * @param names
      * @param condition
      */
-    private static void filter(List<String> names, Predicate<String> condition) {
-        names.stream().filter((name) -> (condition.test(name))).forEach((name) -> {
-            System.out.println(name + " ");
-        });
+    private static void testFilter(List<String> names, Predicate<String> condition) {
+        names.stream().filter((name) -> (condition.test(name))).forEach((name) -> System.out.println(name + " "));
     }
 
-    private void testfunction1() {
+    private void testErgodic() {
         List<String> list = Arrays.asList("zhangsan", "lisi", "wangwu");
         Collections.sort(list, String::compareTo);
         Collections.sort(list, Comparator.naturalOrder());
