@@ -1,11 +1,9 @@
-package com.plain.java.demo;
+package com.plain.java.functional;
 
 import org.junit.Test;
 
 import javax.swing.*;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -21,18 +19,15 @@ public class LambdaDemo {
         ).start();
         Runnable runnable = () -> System.out.println("dfa");
 
-
         JButton show = new JButton("Show");
         // Java 8方式：
-        show.addActionListener((e) -> {
-            System.out.println("Light, Camera, Action !! Lambda expressions Rocks");
-        });
-
+        show.addActionListener((e) -> System.out.println("Light, Camera, Action !! Lambda expressions Rocks"));
 
         // Java 8之后：
         List features = Arrays.asList("Lambdas", "Default Method", "Stream API", "Date and Time API");
         features.forEach(n -> System.out.println(n));
 
+        testfunction1();
 
         /**
          * 过滤
@@ -64,6 +59,17 @@ public class LambdaDemo {
         });
     }
 
+    private void testfunction1() {
+        List<String> list = Arrays.asList("zhangsan", "lisi", "wangwu");
+        Collections.sort(list, String::compareTo);
+        Collections.sort(list, Comparator.naturalOrder());
+
+        list.forEach((item) -> System.out.println(item));
+        list.forEach(String::toUpperCase);
+        list.stream().forEach(item -> System.out.println(item));
+        list.stream().map(String::toUpperCase).forEach(item -> System.out.println(item));
+    }
+
 
     @Test
     public void mapReduce() {
@@ -71,12 +77,14 @@ public class LambdaDemo {
         List<Integer> costBeforeTax = Arrays.asList(100, 200, 300, 400, 500);
         for (Integer cost : costBeforeTax) {
             double price = cost + .12 * cost;
-            System.out.println(price);
+            System.out.print(price + " ");
         }
+        System.out.println();
 
         // 使用lambda表达式
         costBeforeTax = Arrays.asList(100, 200, 300, 400, 500);
-        costBeforeTax.stream().map((cost) -> cost + .12 * cost).forEach(System.out::println);
+        costBeforeTax.stream().map((cost) -> cost + .12 * cost + " ").forEach(System.out::print);
+        System.out.println();
 
         // 新方法：它也能够最大限度的利用多核处理器的能力
         costBeforeTax = Arrays.asList(100, 200, 300, 400, 500);
@@ -87,15 +95,15 @@ public class LambdaDemo {
         final List<Integer> numbers = Arrays.asList(1, 2, 3, 4);
         final Optional<Integer> sum = numbers.stream()
                 .reduce((a, b) -> a + b);
-        int i = sum.orElseGet(() -> 0); //计算结果为null时返回0
+        int i = sum.orElse(0); //计算结果为null时返回0
 
         System.out.println("i--- " + i);
         System.out.println(sum.get()); //当然可以直接get
 
 
         final List<Integer> numbers1 = Arrays.asList(1, 2, 3, 4);
-        final Integer sum1 = numbers.stream()
-                .reduce(0, (a, b) -> a + b); //有初始值的reduce
-        System.out.println("i--- " + i);
+        final Integer sum1 = numbers1.stream()
+                .reduce(5, (a, b) -> a + b); //有初始值的reduce
+        System.out.println("i--- " + sum1);
     }
 }
