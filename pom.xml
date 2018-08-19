@@ -13,6 +13,7 @@
         <module>springcloud</module>
         <module>elasticsearch</module>
         <module>webservice</module>
+        <module>serialize</module>
     </modules>
 
     <groupId>com.czj.javademo</groupId>
