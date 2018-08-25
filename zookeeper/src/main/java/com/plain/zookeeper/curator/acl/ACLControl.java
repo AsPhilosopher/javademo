@@ -15,6 +15,9 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 个人理解：你所设置的权限，在创建节点时会加入到节点的信息上，你对节点的操作节点根据它的ACL信息判断你是否有权限
+ */
 public class ACLControl {
     private String authStr1 = "admin:admin";
     private String authStr2 = "user:user";
@@ -25,6 +28,11 @@ public class ACLControl {
 
     private byte[] auth2 = authStr2.getBytes();
 
+    /**
+     * 一个客户端设置不同ACLProvider
+     *
+     * @throws Exception
+     */
     @Test
     public void test1() throws Exception {
 //        设置权限访问类型
@@ -46,6 +54,11 @@ public class ACLControl {
         }
     }
 
+    /**
+     * 两个客户端设置相同ACLProvider，不同auth
+     *
+     * @throws Exception
+     */
     @Test
     public void test2() throws Exception {
 //        设置权限访问类型
@@ -70,6 +83,11 @@ public class ACLControl {
         }
     }
 
+    /**
+     * 设置权限列表
+     *
+     * @throws Exception
+     */
     @Test
     public void test3() throws Exception {
 //        设置权限访问类型
@@ -98,7 +116,7 @@ public class ACLControl {
     }
 
     /**
-     * 验证在ACLProvider里设置id的值是否有用
+     * 验证在ACLProvider里设置id的值是否有用->并没什么用
      *
      * @throws Exception
      */
@@ -147,6 +165,7 @@ public class ACLControl {
         System.out.println(curator1.getACL().forPath("/"));
         System.out.println(curator1.getACL().forPath("/test"));
 
+        aclProvider = getACLProvider1("read"); //TODO 这里再设置读权限无效
         CuratorFramework curator2 = getCuratorFramework1(scheme1, auth2, namespace1, aclProvider);
         curator2.start();
         try {
