@@ -16,6 +16,7 @@
         <module>serialize</module>
         <module>log</module>
         <module>nosql</module>
+        <module>guava</module>
     </modules>
 
     <groupId>com.czj.javademo</groupId>
