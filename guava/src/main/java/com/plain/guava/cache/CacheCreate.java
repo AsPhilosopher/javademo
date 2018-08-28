@@ -39,6 +39,16 @@ public class CacheCreate {
         };
     }
 
+    public static CacheLoader<String, String> createCacheLoaderForString() {
+        return new CacheLoader<String, String>() {
+            @Override
+            public String load(String key) throws Exception {
+                System.out.println("加载创建key:" + key);
+                return key;
+            }
+        };
+    }
+
     /**
      * 创建 Callable
      *
