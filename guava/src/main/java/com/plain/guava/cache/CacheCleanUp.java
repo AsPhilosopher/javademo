@@ -47,7 +47,7 @@ public class CacheCleanUp {
             if (notification.wasEvicted()) {
                 RemovalCause cause = notification.getCause();
                 System.out.println("remove cacase is :" + cause.toString());
-                System.out.println("key:" + notification.getKey() + "value:" + notification.getValue());
+                System.out.println("key:" + notification.getKey() + " value:" + notification.getValue());
             }
         };
         LoadingCache<String, String> cache = CacheBuilder.newBuilder()
