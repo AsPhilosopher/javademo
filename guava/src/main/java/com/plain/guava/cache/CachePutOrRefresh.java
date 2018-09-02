@@ -4,11 +4,16 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.cache.Weigher;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -104,5 +109,35 @@ public class CachePutOrRefresh {
         TimeUnit.SECONDS.sleep(3);
         Long result2 = cache.getUnchecked("guava");
         System.out.println("是否刷新: " + (result1.longValue() != result2.longValue() ? "是的" : "否"));
+    }
+
+    @Test
+    public void testAsysCacheRefresh() {
+        ListeningExecutorService backgroundRefreshPools =
+                MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(20));
+        LoadingCache<String, Object> caches = CacheBuilder.newBuilder()
+                .maximumSize(100)
+                .refreshAfterWrite(2, TimeUnit.SECONDS)
+                .build(new CacheLoader<String, Object>() {
+                    @Override
+                    public Object load(String key) {
+                        return key + "@@@";
+                    }
+
+                    @Override
+                    public ListenableFuture<Object> reload(String key,
+                                                           Object oldValue) {
+                        return backgroundRefreshPools.submit(() -> key + "###");
+                    }
+                });
+        try {
+            System.out.println(caches.get("key-zorro"));
+            TimeUnit.SECONDS.sleep(3);
+            System.out.println(caches.get("key-zorro"));
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
