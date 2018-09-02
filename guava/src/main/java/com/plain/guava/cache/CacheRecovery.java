@@ -24,7 +24,12 @@ public class CacheRecovery {
         val = cache.getIfPresent("guava"); //不会重新加载创建cache
         System.out.println("被销毁：" + (val == null ? "是的" : "否"));
 
+        //只要一直读就能延长寿命
         cache.getUnchecked("cache");
+        TimeUnit.SECONDS.sleep(1);
+        val = cache.getIfPresent("cache"); //不会重新加载创建cache
+        System.out.println("被销毁：" + (val == null ? "是的" : "否"));
+
         TimeUnit.SECONDS.sleep(1);
         val = cache.getIfPresent("cache"); //不会重新加载创建cache
         System.out.println("被销毁：" + (val == null ? "是的" : "否"));
@@ -55,6 +60,11 @@ public class CacheRecovery {
         val = cache.getIfPresent("guava"); //不会重新加载创建cache
         System.out.println("被销毁：" + (val == null ? "是的" : "否"));
 
+        cache.put("guava", "cache"); //手动插入，能延长寿命
+        TimeUnit.SECONDS.sleep(1);
+        val = cache.getIfPresent("guava"); //不会重新加载创建cache
+        System.out.println("被销毁：" + (val == null ? "是的" : "否"));
+
         cache.getUnchecked("guava");
         TimeUnit.SECONDS.sleep(1);
         val = cache.getIfPresent("guava"); //读并不难延长寿命
@@ -72,19 +82,22 @@ public class CacheRecovery {
      * @throws InterruptedException
      */
     @Test
-    public void testWeakKey() throws ExecutionException, InterruptedException {
+    public void testWeakOrSoft() throws ExecutionException, InterruptedException {
         LoadingCache<String, String> cache = CacheBuilder.newBuilder()
                 .weakKeys()
                 .weakValues()
 //                .softValues()
                 .build(CacheCreate.createCacheLoaderForString());
         cache.getUnchecked("guava");
-        cache.getUnchecked("wangji");
+        String key = new String("wangji");
+        cache.getUnchecked(key);
+        key = null;
 
         System.gc();
+
         TimeUnit.MILLISECONDS.sleep(1000);
-        String val = cache.getIfPresent("guava"); //不会重新加载创建cache
-        System.out.println(cache.getIfPresent("wangji"));
+        String val = cache.getIfPresent("wangji"); //不会重新加载创建cache
+        System.out.println(cache.getIfPresent("guava"));
         System.out.println("被销毁：" + (val == null ? "是的" : "否"));
     }
 }

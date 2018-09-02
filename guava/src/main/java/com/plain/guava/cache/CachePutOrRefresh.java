@@ -60,6 +60,7 @@ public class CachePutOrRefresh {
 
     /**
      * 要注意回收也是在重量逼近限定值时就进行了，还要知道重量是在缓存创建时计算的，因此要考虑重量计算的复杂度
+     * 最大权重是每段平分的，某段上元素总重量超过该段的最大权重，就会被清理
      *
      * @throws ExecutionException
      * @throws InterruptedException
