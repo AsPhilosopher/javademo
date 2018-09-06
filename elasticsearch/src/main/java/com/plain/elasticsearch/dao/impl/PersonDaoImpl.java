@@ -120,6 +120,7 @@ public class PersonDaoImpl implements PersonDao {
         ;
         try {
             BoolQueryBuilder boolBuilder = QueryBuilders.boolQuery();
+            //should是只要有满足的，我不满足没关系；must是我一定要满足
             if (person.getName() != null) {
 //	            boolBuilder.must(QueryBuilders.matchQuery("name", person.getName()));
                 boolBuilder.should(QueryBuilders.matchQuery("name", person.getName()));
