@@ -28,6 +28,7 @@ public class ServiceHiApplication {
     @Value("${server.port}")
     String port;
 
+    //http://localhost:8762/hi?name=czj
     @RequestMapping("/hi")
     public String home(@RequestParam String name) {
         return "Hi " + name + ",I am from port:" + port;
