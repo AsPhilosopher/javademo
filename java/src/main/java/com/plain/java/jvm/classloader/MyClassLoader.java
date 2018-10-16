@@ -2,6 +2,12 @@ package com.plain.java.jvm.classloader;
 
 import java.io.*;
 
+/**
+ * https://blog.csdn.net/h2604396739/article/details/78115552
+ * 自定义类加载器的方法:
+ * 1、如果不想打破双亲委派模型，那么只需要重写findClass方法即可
+ * 2、如果想打破双亲委派模型，那么就重写整个loadClass方法
+ */
 public class MyClassLoader extends ClassLoader {
 
     private String path;   //类的加载路径
