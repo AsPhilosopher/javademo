@@ -17,7 +17,7 @@ public class Consumer {
      * @RabbitHandler 指定消息的处理方法
      */
     @RabbitHandler
-    public void process(String message) {
-        logger.info("接收的消息为: {}", message);
+    public void process(byte[] message) {
+        logger.info("接收的消息为: {}", new String(message));
     }
 }

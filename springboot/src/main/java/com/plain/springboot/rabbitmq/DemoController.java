@@ -19,7 +19,8 @@ public class DemoController {
     @GetMapping("/send")
     public String send(String msg) {
         //发送消息
-        rabbitmqTemplate.convertAndSend("okong", msg);
+//        rabbitmqTemplate.convertAndSend("okong", msg);
+        rabbitmqTemplate.convertAndSend("myExchange", "routeKey", msg);
         return "消息：" + msg + ",已发送";
     }
 }
