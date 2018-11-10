@@ -17,6 +17,7 @@
         <module>log</module>
         <module>nosql</module>
         <module>guava</module>
+        <module>mq</module>
     </modules>
 
     <groupId>com.czj.javademo</groupId>
