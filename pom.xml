@@ -18,6 +18,7 @@
         <module>nosql</module>
         <module>guava</module>
         <module>mq</module>
+        <module>dubbo</module>
     </modules>
 
     <groupId>com.czj.javademo</groupId>
