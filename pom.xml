@@ -19,6 +19,7 @@
         <module>guava</module>
         <module>mq</module>
         <module>dubbo</module>
+        <module>op</module>
     </modules>
 
     <groupId>com.czj.javademo</groupId>
