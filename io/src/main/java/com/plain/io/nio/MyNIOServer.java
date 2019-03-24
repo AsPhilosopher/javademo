@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
+import java.nio.channels.*;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ForkJoinPool;
@@ -32,6 +29,7 @@ public class MyNIOServer {
         serverSocketChannel.configureBlocking(false);
         serverSocketChannel.bind(new InetSocketAddress(InetAddress.getLocalHost(), port));
         serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
+        System.out.println("----START----");
     }
 
     private void dispatch() throws IOException {
@@ -52,9 +50,29 @@ public class MyNIOServer {
                     // 同样将于客户端的通道在selector上注册，,可以通过key获取关联的选择器
                     channel.register(selector, SelectionKey.OP_READ);
                 } else if (key.isReadable()) {
+                    SocketChannel channel = (SocketChannel) key.channel();
+                    if (!channel.isConnected() || !channel.isOpen()) {
+                        continue;
+                    }
+                    ByteBuffer buffer = ByteBuffer.allocate(1024);
+                    int count = channel.read(buffer);
+                    if (0 == count) {
+                        System.out.println("count == 0");
+                        continue;
+                    }
+                    if (-1 == count) {
+                        synchronized (this) {
+                            if (channel.isOpen()) {
+                                System.out.println("-1__Close");
+                                channel.close();
+                                key.channel();
+                            }
+                        }
+                        continue;
+                    }
                     forkjoinPool.execute(() -> {
                         try {
-                            handle(key);
+                            handle(channel, buffer, count);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -64,21 +82,7 @@ public class MyNIOServer {
         }
     }
 
-    private void handle(SelectionKey key) throws IOException {
-        SocketChannel channel = (SocketChannel) key.channel();
-        if (!channel.isConnected() || !channel.isOpen()) {
-            return;
-        }
-        ByteBuffer buffer = ByteBuffer.allocate(1024);
-        int count = channel.read(buffer);
-        if (0 == count) {
-            return;
-        }
-        if (-1 == count) {
-            channel.close();
-            key.channel();
-            return;
-        }
+    private void handle(SocketChannel channel, ByteBuffer buffer, int count) throws IOException {
         byte[] bytes = new byte[count];
         buffer.flip();
         buffer.get(bytes);

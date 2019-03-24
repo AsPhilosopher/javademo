@@ -12,6 +12,7 @@ import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Data
@@ -55,18 +56,28 @@ public class MyNIOClient {
                     if (channel.finishConnect()) {
                         channel.configureBlocking(false);
                         channel.register(selector, SelectionKey.OP_READ);
-                        channel.write(ByteBuffer.wrap((name + " args" + requestCount++).getBytes()));
+                        channel.write(ByteBuffer.wrap((name + " args" + ++requestCount).getBytes()));
                     }
                 } else if (key.isReadable()) {
                     SocketChannel channel = handleResponse(key);
-                    if (i < 9999) {
-                        channel.write(ByteBuffer.wrap((name + " args" + requestCount++).getBytes()));
-                    }
+                    channel.write(ByteBuffer.wrap((name + " args" + ++requestCount).getBytes()));
                 }
             }
         }
-        socketChannel.shutdownOutput();
-        socketChannel.shutdownInput();
+
+        selector.select();
+        Set<SelectionKey> selectedKeys = selector.selectedKeys();
+        Iterator<SelectionKey> it = selectedKeys.iterator();
+        while (it.hasNext()) {
+            SelectionKey key = it.next();
+            it.remove();
+            if (key.isReadable()) {
+                handleResponse(key);
+                System.out.println("FINISH LAST");
+            }
+        }
+//        socketChannel.shutdownInput();
+//        socketChannel.shutdownOutput();
         socketChannel.close();
     }
 
@@ -82,7 +93,7 @@ public class MyNIOClient {
         return channel;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         ForkJoinPool forkjoinPool = new ForkJoinPool((Runtime.getRuntime().availableProcessors() << 1));
         AtomicInteger atomicInteger = new AtomicInteger(0);
         for (int i = 0; i < 2; i++) {
@@ -92,6 +103,10 @@ public class MyNIOClient {
                 System.out.println(myNIOClient.getRequestCount());
             });
         }
-        while (!forkjoinPool.isTerminated());
+        int count = 0;
+        while (count < 5 && !forkjoinPool.isTerminated()) {
+            TimeUnit.SECONDS.sleep(1);
+            ++count;
+        }
     }
 }
