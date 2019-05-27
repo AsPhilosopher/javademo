@@ -20,6 +20,7 @@
         <module>mq</module>
         <module>dubbo</module>
         <module>op</module>
+        <module>resilience4j</module>
     </modules>
 
     <groupId>com.czj.javademo</groupId>
