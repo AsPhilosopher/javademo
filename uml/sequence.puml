@@ -1,0 +1,48 @@
+'http://plantuml.com/zh/sequence-diagram
+
+@startuml
+Alice -> Bob: Authentication Request
+Bob --> Alice: Authentication Response
+
+Alice -> Bob: Another authentication Request
+Alice <-- Bob: another authentication Response
+@enduml
+
+@startuml
+actor Foo1
+boundary Foo2
+control Foo3
+entity Foo4
+database Foo5
+collections Foo6
+Foo1 -> Foo2 : To boundary
+Foo1 -> Foo3 : To control
+Foo1 -> Foo4 : To entity
+Foo1 -> Foo5 : To database
+Foo1 -> Foo6 : To collectionsp
+@enduml
+
+@startuml
+Alice -> Bob: Authentication Request
+
+alt successful case
+
+	Bob -> Alice: Authentication Accepted
+
+else some kind of failure
+
+	Bob -> Alice: Authentication Failure
+	group My own label
+		Alice -> Log : Log attack start
+	    loop 1000 times
+	        Alice -> Bob: DNS Attack
+	    end
+		Alice -> Log : Log attack end
+	end
+
+else Another type of failure
+
+   Bob -> Alice: Please repeat
+
+end
+@enduml
