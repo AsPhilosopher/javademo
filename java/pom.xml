@@ -38,7 +38,7 @@
                         <manifestEntries>
                             <Project-name>${project.name}</Project-name>
                             <Project-version>${project.version}</Project-version>
-                            <Premain-Class>com.plain.java.javaagent.App</Premain-Class>
+                            <Premain-Class>com.plain.java.javaagent.App2</Premain-Class>
                         </manifestEntries>
 
                         <!--<manifest>
