@@ -1,0 +1,19 @@
+@startuml
+[broker1\n topic1/part1 \n topic1/part2 \n topic2/part1] as broker1
+[broker2\n topic1/part1 \n topic1/part2 \n topic2/part1] as broker2
+[broker3\n topic1/part1 \n topic1/part2 \n topic2/part1] as broker3
+
+[producer1] --> broker1 : push
+[producer1] --> broker2 : push
+[producer1] --> broker3 : push
+
+[producer2] --> broker1 : push
+[producer2] --> broker2 : push
+[producer2] --> broker3 : push
+
+[consumer2] -up-> broker3 : pull
+[consumer1] -up-> broker2 : pull
+[consumer1] -up-> broker1 : pull
+
+note right of [Zookeeper] : 协调管理Kafka集群
+@enduml
