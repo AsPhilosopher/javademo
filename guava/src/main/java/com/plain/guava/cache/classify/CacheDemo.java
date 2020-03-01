@@ -16,9 +16,9 @@ public class CacheDemo {
             }
         };
 
-        CacheLoader cacheLoader = new CacheLoader() {
+        CacheLoader<String, String> cacheLoader = new CacheLoader<String, String>() {
             @Override
-            public Object load(Object key) throws Exception {
+            public String load(String key) throws Exception {
                 return "form: " + key;
             }
         };

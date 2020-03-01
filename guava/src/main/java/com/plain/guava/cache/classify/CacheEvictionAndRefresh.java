@@ -1,9 +1,7 @@
 package com.plain.guava.cache.classify;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.RemovalListener;
-import com.google.common.cache.RemovalNotification;
+import com.google.common.cache.*;
+import com.google.common.util.concurrent.*;
 import lombok.Data;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +10,8 @@ import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class CacheEvictionAndRefresh {
@@ -137,15 +137,53 @@ public class CacheEvictionAndRefresh {
         System.out.println(softValuesCache.size());
     }
 
-    /**
-     * TODO
-     */
     @Test
-    public void refresh() {
-        /*Cache refreshCache = CacheBuilder.newBuilder()
+    public void refresh() throws InterruptedException {
+        final ExecutorService executorService = Executors.newFixedThreadPool(1);
+        ListeningExecutorService listeningExecutorService = MoreExecutors.listeningDecorator(executorService);
+        final String VALUE = "VALUE";
+
+        CacheLoader<String, String> cacheLoader = new CacheLoader<String, String>() {
+            @Override
+            public String load(String key) throws Exception {
+                return "form: " + key;
+            }
+
+            @Override
+            public ListenableFuture<String> reload(String oldKey, String oldValue) throws Exception {
+                if (VALUE.equals(oldValue)) {
+                    return Futures.immediateFuture(oldValue);
+                }
+                ListenableFutureTask<String> listenableFutureTask = ListenableFutureTask.create(() -> {
+                    return String.format("key:%s old:%s", oldKey, oldValue);
+                });
+                listeningExecutorService.execute(listenableFutureTask);
+                return listenableFutureTask;
+            }
+        };
+
+        LoadingCache<String, String> loadingCache = CacheBuilder.newBuilder()
                 .maximumSize(2)
+                .removalListener(removalListener)
                 .refreshAfterWrite(3, TimeUnit.SECONDS)
-                .build();*/
+                .build(cacheLoader);
+
+        String key = "key";
+        loadingCache.refresh(key);
+        System.out.println(loadingCache.getUnchecked(key));
+        loadingCache.refresh(key);
+        System.out.println(loadingCache.getUnchecked(key));
+
+        String KEY = "KEY";
+        loadingCache.put(KEY, "value");
+        TimeUnit.SECONDS.sleep(5);
+        System.out.println(loadingCache.getUnchecked(KEY));
+        TimeUnit.SECONDS.sleep(2);
+        System.out.println(loadingCache.getUnchecked(KEY));
+
+        loadingCache.put(KEY, VALUE);
+        TimeUnit.SECONDS.sleep(5);
+        System.out.println(loadingCache.getUnchecked(KEY));
     }
 
     @Data
