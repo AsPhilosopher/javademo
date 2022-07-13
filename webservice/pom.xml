@@ -14,7 +14,7 @@
     <artifactId>webservice</artifactId>
 
     <properties>
-        <cxf.version>2.6.2</cxf.version>
+        <cxf.version>2.6.7</cxf.version>
         <spring.version>3.2.8.RELEASE</spring.version>
     </properties>
 
